@@ -1,13 +1,13 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
-const cfonts = require('cfonts');
+const chalk = require('chalk');
 
 // Create a MySQL connection
 const connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "",
+    password: "bce2e2d1",
     database: "employeeTracker_db",
 });
 
@@ -19,21 +19,24 @@ connection.connect((err) => {
     start();
 });
 
-// Display ASCII art title using cfonts
-cfonts.say('Thomas & Friends \nSQL Employee Tracker', {
-    font: 'block',             
-    align: 'left',             
-    colors: ['blue'],        
-    background: 'transparent',  
-    letterSpacing: 1,          
-    lineHeight: 1,              
-    space: true,                
-    maxLength: '0',             
-    gradient: false,            
-    independentGradient: false, 
-    transitionGradient: false,  
-    env: 'node'                 
-});
+// Function to display a formatted title
+function displayEmployeeTracker() {
+    const employeeTracker = `
+ █████╗ ██████╗ ██╗   ██╗███████╗███████╗██████╗ 
+██╔══██╗██╔═══██╗██║   ██║██╔════╝██╔════╝██╔══██╗
+███████║██║   ██║██║   ██║█████╗  █████╗  ██║  ██║
+██╔══██║██║   ██║██║   ██║██╔══╝  ██╔══╝  ██║  ██║
+██║  ██║╚██████╔╝╚██████╔╝███████╗██║     ██████╔╝
+╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚══════╝╚═╝     ╚═════╝ 
+    `;
+
+    console.log(chalk.white.bgBlue(employeeTracker));
+}
+
+// Display "Employee Tracker" using ASCII art
+displayEmployeeTracker();
+
+
 
 // Function to Start the employee Tracker Application
 function start() {
