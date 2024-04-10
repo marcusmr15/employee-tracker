@@ -101,14 +101,20 @@ function start() {
 
 // Function to view all departments
 function viewAllDepartments() {
+    console.log("Viewing all departments...");
     const query = "SELECT * FROM departments";
     connection.query(query, (err, res) => {
-        if (err) throw err;
+        if (err) {
+            console.error("Error fetching departments:", err);
+            return;
+        }
+        console.log("Departments:");
         console.table(res);
         // Restart the application
         start();
     });
 }
+
 
 // Function to view all roles
 function viewAllRoles() {
@@ -161,7 +167,23 @@ function addDepartment() {
 function addRole() {
     const query = "SELECT * FROM departments";
     connection.query(query, (err, res) => {
-        if (err) throw err;
+        if (err) {
+            console.error("Error fetching departments:", err);
+            return;
+        }
+
+        if (res.length === 0) {
+            console.log("No departments found. Please add a department first.");
+            start();
+            return;
+        }
+
+        // Format the choices for departments
+        const departmentChoices = res.map((department) => ({
+            name: department.department_name,
+            value: department.id,
+        }));
+
         inquirer
             .prompt([
                 {
@@ -176,24 +198,31 @@ function addRole() {
                 },
                 {
                     type: "list",
-                    name: "department",
+                    name: "departmentId",
                     message: "Select the department for the new role:",
-                    choices: res.map((department) => department.department_name),
+                    choices: departmentChoices,
                 },
             ])
             .then((answers) => {
-                const department = res.find((department) => department.department_name === answers.department);
                 const query = "INSERT INTO roles SET ?";
-                connection.query(query, {
+                const role = {
                     title: answers.title,
                     salary: answers.salary,
-                    department_id: department.id,
-                }, (err, res) => {
-                    if (err) throw err;
-                    console.log(`Added role ${answers.title} with salary ${answers.salary} to the ${answers.department} department in the database!`);
+                    department_id: answers.departmentId,
+                };
+
+                connection.query(query, role, (err, res) => {
+                    if (err) {
+                        console.error("Error adding role:", err);
+                        return;
+                    }
+                    console.log(`Added role ${role.title} with salary ${role.salary} to the database!`);
                     // Restart the application
                     start();
                 });
+            })
+            .catch((error) => {
+                console.error("Error with inquirer prompt:", error);
             });
     });
 }
