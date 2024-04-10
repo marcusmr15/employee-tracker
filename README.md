@@ -26,7 +26,7 @@ To run the Employee Tracker app locally, follow these steps:
 
 ## Usage
 
-🎬 [Click here to view the video](_insert link_)
+🎬 [Click here to view the video](https://drive.google.com/file/d/1LIh-cWlI1eCKA1xNyxD1y_-Z7Yievt9R/view?usp=sharing)
 
 Steps after installation
 
